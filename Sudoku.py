@@ -4,6 +4,8 @@
 ## Jonathan Sanchez
 ## Using python 3 
 
+import random as rand
+
 sudoku=[]  ##Game variable
 square_iden = {}  ## We will identify which positions are in each square
 position_iden= {} ## We will identify the square of each position
@@ -33,11 +35,34 @@ def init_dicts():
 
 			position_iden[(x, y)]=z
 
+def validsquare(n, pos):
+	for tuplepos in square_iden[position_iden[pos]]:
+		if n == sudoku[tuplepos[0]][tuplepos[1]]: return False
+	return True
+
+def isvalidnum(n, pos):
+	for val in sudoku[pos[0]]:
+		if val==n: return False
+	for column in sudoku:
+		if column[pos[1]] == n: return False
+	if validsquare(n, pos): return True
+	else: return False
+
+def generate_sud(): ##Not finished
+	for x in range(9):
+		for i in range(9):
+			value=(rand.randint(1,9))
+			if isvalidnum(value, (x, i)):
+			  sudoku[x][i]=value
+
+		
+
+
+
 
 def main():
+	init_sudoku()
 	init_dicts()
-	print(square_iden)
-	print(position_iden)
-
+	#generate_sud()	
 if __name__ == "__main__":
 	main()
