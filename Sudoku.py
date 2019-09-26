@@ -67,7 +67,7 @@ def generate_sud():
 	for x in range(9):
 		for i in range(9):
 			value=(rand.randint(1,9))
-			while(!(isvalidnum(value, (x,i)))):
+			while(isvalidnum(value, (x,i)) == False):
 				value = (rand.randint(1,9))
 			sudoku[x][i]=value
 
