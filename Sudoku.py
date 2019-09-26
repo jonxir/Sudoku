@@ -5,12 +5,15 @@
 ## Using python 3
 
 import random as rand
+import time
+
 
 sudoku=[]  		  ##Game variable
 square_iden = {}  ## We will identify which positions are in each square
 position_iden= {} ## We will identify the square of each position
 possibilities= {}
-
+columneigh= {}
+rowneigh= {}
 #Print Menu
 def print_Menu():
 	print(" ----------------- Menu ----------------- ")
@@ -49,35 +52,80 @@ def init_dicts():
 			position_iden[(x, y)]=z
 			possibilities[(x, y)]=possible.copy()
 
-#'n' is a value ;; 'pos' is a tuple
-def validsquare(n, pos):
-	for tuplepos in square_iden[position_iden[pos]]:
-		if n == sudoku[tuplepos[0]][tuplepos[1]]: return False
-	return True
+def populateneigh():
+	for pos in position_iden:
+		for x in range(9):
+			for y in range(9):
+				if pos != (x,y):
+					if x == pos[0]: 
+						if pos in rowneigh: rowneigh[pos]+=[(x,y)]
+						else: rowneigh[pos]=[(x,y)]
+					elif y == pos[1]:
+						if pos in columneigh: columneigh[pos]+=[(x,y)]
+						else: columneigh[pos]=[(x,y)]
 
-#'n' is a value ;; 'pos' is a tuple
-def isvalidnum(n, pos):
-	for val in sudoku[pos[0]]:
-		if val==n: return False
-	for column in sudoku:
-		if column[pos[1]] == n: return False
-	if validsquare(n, pos): return True
-	else: return False
+
+
 
 def extractmin():
 	return (min([len(i) for i in possibilities.values()]))
 
 def extractlower():
 	lower = extractmin()
+	print(lower)
 	return [ x for x in possibilities if (len(possibilities[x]) == lower)]
 
+
+
+
+def minimizepossibilities(n, pos):
+	first=True
+	for rown in rowneigh[pos]:
+		if n in possibilities[rown]: possibilities[rown].remove(n)
+		if pos in rowneigh[rown]: rowneigh[rown].remove(pos)
+
+	for column in columneigh[pos]:
+		if n in possibilities[column]: possibilities[column].remove(n)
+		if pos in columneigh[column]: columneigh[column].remove(pos)
+
+	for tuplepos in square_iden[position_iden[pos]]:
+		if n in possibilities[tuplepos]: possibilities[tuplepos].remove(n)
+
+	square_iden[position_iden[pos]].remove(pos)
+	del rowneigh[pos]
+	del columneigh[pos]
+	del possibilities[pos]
+	"""
+	for rown, column in zip(rowneigh[pos], columneigh[pos]):
+		if n in possibilities[rown]: possibilities[rown].remove(n)
+		if n in possibilities[column]: possibilities[column].remove(n)
+
+		for tuplepos in square_iden[position_iden[pos]]:
+				if n in possibilities[tuplepos]: possibilities[tuplepos].remove(n)
+		if pos in rowneigh[rown]: rowneigh[rown].remove(pos)
+		if pos in columneigh[column]: columneigh[column].remove(pos)
+		
+		if first == True:
+			square_iden[position_iden[pos]].remove(pos)
+			del rowneigh[pos]
+			del columneigh[pos]
+			del possibilities[pos]
+			first=False
+	"""
 #Should be finished. CHECK!
 def generate_sud():
-	lowercells=extractlower()
-	selection=rand.choice(lowercells)
-	value=rand.choice(possibilities[selection])
-	print(value)
-
+	try:
+		for i in range(81):
+			lowercells=extractlower()
+			print(lowercells)
+			selection=rand.choice(lowercells)
+			value=rand.choice(possibilities[selection])
+			sudoku[selection[0]][selection[1]]=value
+			print_sud()
+			minimizepossibilities(value, selection)
+		return True
+	except:
+		return False
 
 #Prints a grade with a completed sudoku
 def print_sud():
@@ -94,16 +142,33 @@ def print_sud():
 		print(" || ")
 	print('=='*14)
 
+def clearall():
+
+	sudoku.clear() 		  
+	square_iden.clear()  
+	position_iden.clear() 
+	possibilities.clear()
+	columneigh.clear()
+	rowneigh.clear()
+
 #Prints a rank with username and time from a local file in the same directory
 #def get_rank():
-
 
 def main():
 	#option = print_Menu()
 	init_sudoku()
 	init_dicts()
-	print_sud()
-	generate_sud()
+	populateneigh()
+	done=generate_sud()
+	while(done == False):
+		clearall()
+		init_sudoku()
+		init_dicts()
+		populateneigh()
+		done=generate_sud()
+
+
+	
 	'''if(option == 1):
 		generate_sud()
 		#More functions to be implemented
@@ -117,3 +182,23 @@ def main():
 
 if __name__ == "__main__":
 	main()
+
+
+
+#######################################################################
+
+"""
+
+def validsquare(n, pos):
+	for tuplepos in square_iden[position_iden[pos]]:
+		if n == sudoku[tuplepos[0]][tuplepos[1]]: return False
+	return True
+
+#'n' is a value ;; 'pos' is a tuple
+def isvalidnum(n, pos):
+	for val in sudoku[pos[0]]:
+		if val==n: return False
+	for column in sudoku:
+		if column[pos[1]] == n: return False
+	if validsquare(n, pos): return True
+	else: return False """
