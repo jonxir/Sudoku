@@ -73,39 +73,32 @@ def generate_sud():
 
 #Prints a grade with a completed sudoku
 def print_sud():
-	index = 0
 	for x in range(9):
 		if(x == 0 or x == 3 or x == 6):
-			while(index < 9):
-				print('==', sep = '', end='\n')
-				index += 1
-			index = 0
-		for i in range(9):
-			if(i != 3 or i != 6):
-				print('|', end='')
-			else:
-				print('||', end='')
-			print(sudoku[x][i], end='')
-		print('||')
-		while(index < 9):
-			print('--', sep = '', end='\n')
-			index += 1
-		index = 0
+			print('=='*14)
 
-	while(index < 9):
-		print('==', sep='', end='\n')
-		index+=1
+		for i in range(9):
+			if(i == 3 or i == 6):
+				print(" || ", end='')
+			else:
+				print('|', end='')
+
+			print(sudoku[x][i], end='')
+
+		print(" || ")
+	print('=='*14)
 
 #Prints a rank with username and time from a local file in the same directory
 #def get_rank():
 
 
 def main():
-	option = print_Menu()
+	#option = print_Menu()
 	init_sudoku()
 	init_dicts()
+	print_sud()
 
-	if(option == 1):
+	'''if(option == 1):
 		generate_sud()
 		#More functions to be implemented
 
@@ -114,7 +107,7 @@ def main():
 		print_sud()
 
 	if(option == 3):
-		get_rank()
+		get_rank() '''
 
 if __name__ == "__main__":
 	main()
