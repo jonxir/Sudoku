@@ -9,9 +9,9 @@ import random as rand
 sudoku=[]  		  ##Game variable
 square_iden = {}  ## We will identify which positions are in each square
 position_iden= {} ## We will identify the square of each position
+possibilities= {}
 
 #Print Menu
-
 def print_Menu():
 	print(" ----------------- Menu ----------------- ")
 	print("1. Solve sudoku")
@@ -20,7 +20,7 @@ def print_Menu():
 	#More options are welcome
 	print(" ---------------------------------------- ")
 	option = input("Select one of the above options: ")
-	return option
+	return int(option)
 
 ## Initiation of an empty sudoku
 def init_sudoku():
@@ -32,6 +32,7 @@ def init_sudoku():
 
 #Initiation of both dicts
 def init_dicts():
+	possible=[1,2,3,4,5,6,7,8,9]
 	for x in range(9):
 		for y in range(9):
 			z=0
@@ -46,6 +47,7 @@ def init_dicts():
 			else: square_iden[z].append((x,y))
 
 			position_iden[(x, y)]=z
+			possibilities[(x, y)]=possible.copy()
 
 #'n' is a value ;; 'pos' is a tuple
 def validsquare(n, pos):
@@ -62,26 +64,30 @@ def isvalidnum(n, pos):
 	if validsquare(n, pos): return True
 	else: return False
 
+def extractmin():
+	return (min([len(i) for i in possibilities.values()]))
+
+def extractlower():
+	lower = extractmin()
+	return [ x for x in possibilities if (len(possibilities[x]) == lower)]
+
 #Should be finished. CHECK!
 def generate_sud():
-	for x in range(9):
-		for i in range(9):
-			value=(rand.randint(1,9))
-			while(isvalidnum(value, (x,i)) == False):
-				value = (rand.randint(1,9))
-			sudoku[x][i]=value
+	lowercells=extractlower()
+	selection=rand.choice(lowercells)
+	value=rand.choice(possibilities[selection])
+	print(value)
+
 
 #Prints a grade with a completed sudoku
 def print_sud():
 	for x in range(9):
-		if(x == 0 or x == 3 or x == 6):
-			print('=='*14)
+		if(x == 0 or x == 3 or x == 6): print('=='*14)
 
 		for i in range(9):
-			if(i == 3 or i == 6):
-				print(" || ", end='')
-			else:
-				print('|', end='')
+			if(i == 3 or i == 6): print(" || ", end='')
+
+			else: print('|', end='')
 
 			print(sudoku[x][i], end='')
 
@@ -97,7 +103,7 @@ def main():
 	init_sudoku()
 	init_dicts()
 	print_sud()
-
+	generate_sud()
 	'''if(option == 1):
 		generate_sud()
 		#More functions to be implemented
