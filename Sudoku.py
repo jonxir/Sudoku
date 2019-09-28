@@ -75,9 +75,6 @@ def extractlower():
 	print(lower)
 	return [ x for x in possibilities if (len(possibilities[x]) == lower)]
 
-
-
-
 def minimizepossibilities(n, pos):
 	first=True
 	for rown in rowneigh[pos]:
@@ -113,7 +110,6 @@ def minimizepossibilities(n, pos):
 			first=False
 	"""
 
-#Should be finished. CHECK!
 def generate_sud():
 	try:
 		for i in range(81):
@@ -128,7 +124,35 @@ def generate_sud():
 	except:
 		return False
 
+def lineTest(x,y,v):
+    for i in range(9):
+        if(sudoku[x][i] != v and i != y): return False
 
+    return True
+
+def columnTest(x,y,v):
+    for s in range(9):
+        if(sudoku[s][y] != v and s != x): return False
+
+    return True
+
+def validsquare(n, pos):
+	for tuplepos in square_iden[position_iden[pos]]:
+		if n == sudoku[tuplepos[0]][tuplepos[1]]: return False
+
+	return True
+
+def verify_sud():
+    for x in range(9):
+        for y in range(9):
+            value = sudoku[x][y]
+            lineT = lineTest(x,y,value)
+            columnT = columnTest(x,y,value)
+            validS = validsquare(value, (x,y))
+
+            if(lineT is True and columnT is True and validS is True): return False
+
+    return True
 
 #Prints a grade with a completed sudoku
 def print_sud():
@@ -162,15 +186,19 @@ def main():
 	init_sudoku()
 	init_dicts()
 	populateneigh()
-	done=generate_sud()
+	done = generate_sud()
+
+
 	while(done == False):
 		clearall()
 		init_sudoku()
 		init_dicts()
 		populateneigh()
-		done=generate_sud()
+		done = generate_sud()
 
-
+	verified = verify_sud()
+	if(verified is True): print("Sudoku is generated correctly")
+	else: print("Sudoku does not generate correctly")
 
 	'''if(option == 1):
 		generate_sud()
