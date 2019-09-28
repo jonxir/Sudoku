@@ -57,7 +57,7 @@ def populateneigh():
 		for x in range(9):
 			for y in range(9):
 				if pos != (x,y):
-					if x == pos[0]: 
+					if x == pos[0]:
 						if pos in rowneigh: rowneigh[pos]+=[(x,y)]
 						else: rowneigh[pos]=[(x,y)]
 					elif y == pos[1]:
@@ -104,7 +104,7 @@ def minimizepossibilities(n, pos):
 				if n in possibilities[tuplepos]: possibilities[tuplepos].remove(n)
 		if pos in rowneigh[rown]: rowneigh[rown].remove(pos)
 		if pos in columneigh[column]: columneigh[column].remove(pos)
-		
+
 		if first == True:
 			square_iden[position_iden[pos]].remove(pos)
 			del rowneigh[pos]
@@ -112,6 +112,7 @@ def minimizepossibilities(n, pos):
 			del possibilities[pos]
 			first=False
 	"""
+
 #Should be finished. CHECK!
 def generate_sud():
 	try:
@@ -126,6 +127,8 @@ def generate_sud():
 		return True
 	except:
 		return False
+
+
 
 #Prints a grade with a completed sudoku
 def print_sud():
@@ -144,9 +147,9 @@ def print_sud():
 
 def clearall():
 
-	sudoku.clear() 		  
-	square_iden.clear()  
-	position_iden.clear() 
+	sudoku.clear()
+	square_iden.clear()
+	position_iden.clear()
 	possibilities.clear()
 	columneigh.clear()
 	rowneigh.clear()
@@ -168,7 +171,7 @@ def main():
 		done=generate_sud()
 
 
-	
+
 	'''if(option == 1):
 		generate_sud()
 		#More functions to be implemented
