@@ -4,6 +4,7 @@
 ## Jonathan Sanchez
 ## Using python 3
 
+from datetime import date
 import random as rand
 import time
 
@@ -14,6 +15,8 @@ position_iden= {} ## We will identify the square of each position
 possibilities= {}
 columneigh= {}
 rowneigh= {}
+
+
 #Print Menu
 def print_Menu():
 	print(" ----------------- Menu ----------------- ")
@@ -168,6 +171,37 @@ def print_sud():
 
 		print(" || ")
 	print('=='*14)
+
+#This function converts hh:mm:ss into seconds.
+def timeToSeconds(time):
+	return(sum(int(x) * 60 ** i for i,x in enumerate(reversed(time.split(":")))))
+
+#Funciton not working: need to be reapired 
+def modifyingRank(time):
+	username = input("introduce the username to be recorded: ")
+	dateOK = input ("May you want to record the date (Y/n)?")
+	scores = []														#Array containing all the scores
+
+	if(dateOK == 'Y' or dateOK == 'y'):
+		date = date.today()
+
+	fileR = open("Sudoku_Record.txt", "r")
+	#with open("Sudoku_Record.txt", "r") as file
+
+	for line in fileR.readlines():
+		words = line.split()
+		if(len(words) > 1):											#Meaning ew have ot got to the end
+			if(timeToSeconds(words[-1]) < timeToSeconds(time)):
+				scores.append(username + " " + date + " " + time + "\n")
+			scores.append(words)
+
+	fileR.close()
+
+	with open("Sudoku_Record.txt", "w") as fileW:
+
+		for linew in scores:
+			fileW.write(linew)
+
 
 def clearall():
 
